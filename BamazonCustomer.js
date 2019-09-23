@@ -9,3 +9,37 @@ var connection = mysql.createConnection({
   password: "",
   database: "Bamazon"
 })
+
+function start(){
+//prints the items for sale and their details
+connection.query('SELECT * FROM Products', function(err, res){
+  if(err) throw err;
+
+  console.log('================Welcome to BAMazon================')
+  console.log('----------------------------------------------------------------------------------------------------')
+
+  for(var i = 0; i<res.length;i++){
+    console.log("ID: " + res[i].ItemID + " | " + "Product: " + res[i].ProductName + " | " + "Department: " + res[i].DepartmentName + " | " + "Price: " + res[i].Price + " | " + "QTY: " + res[i].StockQuantity);
+    console.log('--------------------------------------------------------------------------------------------------')
+  }
+
+  
+})
+}
+
+//asks if they would like to purchase another item
+function reprompt(){
+  inquirer.prompt([{
+    type: "confirm",
+    name: "reply",
+    message: "Would you like to purchase another item?"
+  }]).then(function(ans){
+    if(ans.reply){
+      start();
+    } else{
+      console.log("See you soon!");
+    }
+  });
+}
+
+start();
