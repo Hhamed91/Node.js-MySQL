@@ -88,23 +88,24 @@ connection.query('SELECT * FROM Products', function(err, res){
         console.log("Sorry, there's not enough in stock!");
       }
 
+      reprompt();
     })
 })
 }
 
 //asks if they would like to purchase another item
 function reprompt(){
-  inquirer.prompt([{
-    type: "confirm",
-    name: "reply",
-    message: "Would you like to purchase another item?"
-  }]).then(function(ans){
-    if(ans.reply){
-      start();
-    } else{
-      console.log("See you soon!");
-    }
-  });
-}
+    inquirer.prompt([{
+      type: "confirm",
+      name: "reply",
+      message: "Would you like to purchase another item?"
+    }]).then(function(ans){
+      if(ans.reply){
+        start();
+      } else{
+        console.log("See you soon!");
+      }
+    });
+  }
 
 start();
