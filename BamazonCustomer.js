@@ -54,7 +54,18 @@ connection.query('SELECT * FROM Products', function(err, res){
       var howMuchToBuy = parseInt(ans.qty);
       var grandTotal = parseFloat(((res[whatToBuy].Price)*howMuchToBuy).toFixed(2));
 
-     
+      //check if quantity is sufficient
+      if(res[whatToBuy].StockQuantity >= howMuchToBuy){
+        //after purchase, updates quantity in Products
+        connection.query("UPDATE Products SET ? WHERE ?", [
+        {StockQuantity: (res[whatToBuy].StockQuantity - howMuchToBuy)},
+        {ItemID: ans.id}
+        ], function(err, result){
+            if(err) throw err;
+            console.log("Success! Your total is $" + grandTotal.toFixed(2) + ". Your item(s) will be shipped to you in 3-5 business days.");
+        });
+
+        
 })
 }
 
