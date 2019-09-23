@@ -65,7 +65,30 @@ connection.query('SELECT * FROM Products', function(err, res){
             console.log("Success! Your total is $" + grandTotal.toFixed(2) + ". Your item(s) will be shipped to you in 3-5 business days.");
         });
 
-        
+        connection.query("SELECT * FROM Departments", function(err, deptRes){
+          if(err) throw err;
+          var index;
+          for(var i = 0; i < deptRes.length; i++){
+            if(deptRes[i].DepartmentName === res[whatToBuy].DepartmentName){
+              index = i;
+            }
+          }
+          
+          //updates totalSales in departments table
+          connection.query("UPDATE Departments SET ? WHERE ?", [
+          {TotalSales: deptRes[index].TotalSales + grandTotal},
+          {DepartmentName: res[whatToBuy].DepartmentName}
+          ], function(err, deptRes){
+              if(err) throw err;
+              //console.log("Updated Dept Sales.");
+          });
+        });
+
+      } else{
+        console.log("Sorry, there's not enough in stock!");
+      }
+
+    })
 })
 }
 
